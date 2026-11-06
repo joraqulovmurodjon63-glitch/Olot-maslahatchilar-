@@ -143,4 +143,4 @@ for(const btn of document.querySelectorAll('nav button'))if(btn.dataset.tab==='c
 sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){++sessionVersion;currentUserId=null;currentRole=null;currentSchoolId=null;hidePanels();show('loginPage',true)}});
 (async()=>{try{const {data,error}=await sb.auth.getSession();if(error)throw error;await applySession(data.session)}catch(err){message('loginMessage','Ulanishda xatolik: '+err.message,true)}})();
 </script>
-</body></html>
+</body></html><!-- GitHub Pages yangilanishi -->
