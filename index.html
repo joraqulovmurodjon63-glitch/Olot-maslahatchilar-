@@ -19,6 +19,21 @@ textarea{width:100%;min-height:95px;border:1px solid #c7d6ec;border-radius:11px;
 /* Maslahatchi dashboardi — administrator dizayniga mos */
 .advisor-layout{display:grid;grid-template-columns:255px minmax(0,1fr);min-height:calc(100vh - 75px)}.advisor-sidebar{background:#fff;border-right:1px solid #e8edf5;padding:25px 13px;display:flex;flex-direction:column;gap:7px}.advisor-side-title{color:#8492a7;font-size:11px;letter-spacing:1.5px;font-weight:800;padding:12px 14px}.advisor-sidebar .advisor-side-button{width:100%;text-align:left;border-radius:12px;background:transparent;color:#34445e;padding:14px;font-weight:650;transition:.18s}.advisor-sidebar .advisor-side-button:hover{background:#edf4ff}.advisor-sidebar .advisor-side-button.active{background:#e8f0ff;color:#1558c6;box-shadow:inset 3px 0 #2563eb}.advisor-side-foot{margin-top:auto;padding:18px 14px;color:#8998ac;font-size:12px}.advisor-main{max-width:none;width:100%;padding:27px 30px;min-width:0}.advisor-main>div{max-width:1350px;margin:0 auto}.advisor-header-tag{font-size:12px;font-weight:600;color:#6681a4;margin-left:10px}.advisor-hero-tag{font-size:12px;letter-spacing:1.2px;font-weight:750;color:#c6ddff}.advisor-hero-icon{font-size:105px;position:relative;z-index:1;opacity:.8}.advisor-hero-action{background:white;color:#174b92;padding:12px 18px}.advisor-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.advisor-kpi{background:white;border:1px solid #e7edf5;border-radius:18px;padding:21px;box-shadow:0 5px 22px rgba(24,53,91,.035);display:flex;flex-direction:column;gap:8px}.advisor-kpi-icon{font-size:25px}.advisor-kpi>span:nth-child(2){font-size:14px;color:#65768e}.advisor-kpi strong{font-size:34px;color:#153c72}.advisor-kpi small{color:#8795a9}.advisor-dash-columns{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}.advisor-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}.advisor-section-head h2{margin:0;font-size:19px}.advisor-section-head span{font-size:12px;color:#7a899f}.advisor-chart{display:flex;align-items:flex-end;gap:12px;min-height:210px;border-bottom:1px solid #e7edf5;padding:20px 5px 0}.advisor-month{flex:1;min-width:0;text-align:center;color:#74849b;font-size:12px}.advisor-month-bar{height:155px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:8px}.advisor-month-bar div{background:linear-gradient(180deg,#3c8cff,#1755b8);border-radius:8px 8px 0 0;width:min(48px,80%);min-height:3px}.advisor-month strong{display:block;color:#1c4e91;margin-bottom:5px}.advisor-status-chart{display:flex;align-items:center;gap:22px;min-height:190px;justify-content:center;flex-wrap:wrap}.advisor-donut{width:145px;height:145px;border-radius:50%;display:grid;place-items:center;flex-shrink:0}.advisor-donut-inner{width:99px;height:99px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column}.advisor-donut-inner strong{font-size:28px;color:#153c72}.advisor-donut-inner small{font-size:11px;color:#8795a9}.advisor-legend{display:grid;gap:11px;font-size:13px;color:#52657f}.advisor-legend b{color:#183c70}.advisor-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.advisor-quick-grid button{background:#f1f6ff;color:#174c90;border:1px solid #e0eafb;display:flex;align-items:center;justify-content:space-between;text-align:left;padding:17px}.advisor-quick-grid button:hover{background:#e5efff}.advisor-quick-grid button span{font-size:22px}.advisor-modern .report-card{box-shadow:0 4px 18px #123a6a0b}@media(max-width:1100px){.advisor-kpi-grid{grid-template-columns:repeat(2,1fr)}.advisor-dash-columns{grid-template-columns:1fr}}@media(max-width:750px){.advisor-layout{display:block}.advisor-sidebar{flex-direction:row;overflow-x:auto;gap:6px;padding:9px;border-right:0;border-bottom:1px solid #e8edf5}.advisor-side-title,.advisor-side-foot{display:none}.advisor-sidebar .advisor-side-button{white-space:nowrap;width:auto;font-size:13px;padding:11px}.advisor-main{padding:16px}.advisor-hero-icon{display:none}.advisor-kpi-grid{gap:10px}.advisor-kpi{padding:14px}.advisor-kpi strong{font-size:27px}.advisor-quick-grid{grid-template-columns:1fr}.advisor-header-tag{display:none}}@media(max-width:430px){.advisor-kpi-grid{grid-template-columns:1fr 1fr}.advisor-kpi>span:nth-child(2){font-size:12px}.advisor-chart{gap:5px}}
 .advisor-education-stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:15px;margin-bottom:18px}.advisor-education-stats .advisor-kpi{min-width:0}@media(max-width:800px){.advisor-education-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.advisor-education-stats{grid-template-columns:1fr}}
+
+/* Ichki bildirishnomalar */
+.notif-wrap{position:relative;display:inline-flex;vertical-align:middle;margin-right:10px}
+.notif-bell{position:relative;background:#edf4ff;color:#174c90;padding:10px 13px;font-size:19px;border:1px solid #dbe7f8}
+.notif-count{position:absolute;top:-7px;right:-7px;background:#c52a2a;color:white;border-radius:99px;padding:2px 6px;font-size:11px;min-width:19px;text-align:center}
+.notif-panel{position:absolute;z-index:100;top:calc(100% + 10px);right:0;width:min(380px,calc(100vw - 24px));max-height:440px;overflow:auto;background:white;border:1px solid #dbe5f2;border-radius:15px;box-shadow:0 16px 35px #1c458030;padding:12px}
+.notif-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 5px 12px}
+.notif-panel-head button{font-size:12px;padding:7px 9px}
+.notif-item{padding:12px 8px;border-top:1px solid #edf1f7;overflow-wrap:anywhere}
+.notif-item.unread{background:#eff6ff;border-radius:8px}
+.notif-item strong{display:block;margin-bottom:4px}
+.notif-item p{margin:5px 0;white-space:pre-wrap;font-size:13px}
+.notif-item small{color:#718096}
+.notif-item button{font-size:12px;padding:6px 9px;margin-top:7px}
+@media(max-width:500px){.notif-wrap{margin-right:4px}.notif-bell{padding:8px 10px}.notif-panel{right:-75px}}
 </style>
 </head>
 <body>
@@ -75,7 +90,7 @@ async function loadData(){message('appMessage','');const {data,error}=await sb.f
 async function addSchool(){const name=prompt('Yangi maktab nomini kiriting:');if(name===null)return;const value=name.trim();if(!value){message('appMessage','Maktab nomi bo‘sh bo‘lmasligi kerak.',true);return}const {error}=await sb.from('schools').insert({name:value});if(error){message('appMessage','Maktab qo‘shilmadi: '+error.message+' (jadval ustunlari yoki RLS siyosatini tekshiring)',true);return}await loadData();message('appMessage','Maktab muvaffaqiyatli qo‘shildi.')}
 async function editSchool(school){const name=prompt('Maktabning yangi nomini kiriting:',school.name);if(name===null)return;const value=name.trim();if(!value){message('appMessage','Maktab nomi bo‘sh bo‘lmasligi kerak.',true);return}const {error}=await sb.from('schools').update({name:value}).eq('id',school.id);if(error){message('appMessage','Maktab o‘zgartirilmadi: '+error.message,true);return}await loadData();message('appMessage','Maktab nomi yangilandi.')}
 async function applySession(session){const version=++sessionVersion;if(!session?.user){currentUserId=null;currentSchoolId=null;currentRole=null;hidePanels();show('loginPage',true);return}const user=session.user;const {data:profile,error}=await sb.from('profiles').select('role,full_name,school_id').eq('user_id',user.id).maybeSingle();if(version!==sessionVersion)return;if(error||!['admin','advisor'].includes(profile?.role)){await sb.auth.signOut();message('loginMessage',error?'Huquqni tekshirishda xatolik: '+error.message:'Hisob uchun ruxsat yo‘q.',true);return}const {data:account,error:accountError}=await sb.from('account_logins').select('is_active').eq('user_id',user.id).maybeSingle();if(version!==sessionVersion)return;if(accountError||account?.is_active!==true){await sb.auth.signOut();message('loginMessage',accountError?'Hisob holatini tekshirib bo‘lmadi.':'Hisob faol emas.',true);return}currentUserId=user.id;currentRole=profile.role;currentSchoolId=profile.school_id;hidePanels();show('loginPage',false);if(profile.role==='advisor'){$('advisorWelcome').textContent='Xush kelibsiz, '+(profile.full_name||'maslahatchi')+'! Maktab ID: '+(profile.school_id??'—');show('advisorPage',true);await loadMyReports();return}$('currentEmail').textContent=user.email??'';show('appPage',true);await loadData()}
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginButton').disabled=true;message('loginMessage','Tekshirilmoqda…');try{const {data,error}=await sb.auth.signInWithPassword({email:loginEmail($('email').value),password:$('password').value});if(error)throw error;$('password').value='';await applySession(data.session)}catch(err){message('loginMessage','Kirishda xatolik: '+err.message,true)}finally{$('loginButton').disabled=false}});
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginButton').disabled=true;message('loginMessage','Tekshirilmoqda…');try{const {data,error}=await sb.auth.signInWithPassword({email:loginEmail($('email').value),password:$('password').value});if(error)throw error;$('password').value='';await applySession(data.session);await loadNotifications()}catch(err){message('loginMessage','Kirishda xatolik: '+err.message,true)}finally{$('loginButton').disabled=false}});
 $('advisorLogout').addEventListener('click',async()=>{await sb.auth.signOut();currentUserId=null;currentRole=null;currentSchoolId=null;hidePanels();show('loginPage',true)});
 $('logoutButton').addEventListener('click',async()=>{await sb.auth.signOut();currentUserId=null;currentRole=null;currentSchoolId=null;hidePanels();show('loginPage',true);message('loginMessage','Tizimdan chiqdingiz.')});
 for(const btn of document.querySelectorAll('nav button'))btn.addEventListener('click',()=>{for(const b of document.querySelectorAll('nav button'))b.classList.toggle('active',b===btn);for(const tab of ['home','schools','advisors','reports','statistics','ranking','classes','documents','studentCouncil'])show(tab+'Tab',tab===btn.dataset.tab)});
@@ -358,7 +373,60 @@ for(const button of document.querySelectorAll('[data-dash-tab]'))button.addEvent
 for(const [section,id] of Object.entries({reports:'advisorReportsNav',classes:'advisorClassesNav',documents:'advisorDocumentsNav',council:'advisorCouncilNav'})){
  $(id).addEventListener('click',()=>showAdvisorSection(section));
 }
-sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){++sessionVersion;currentUserId=null;currentRole=null;currentSchoolId=null;hidePanels();show('loginPage',true)}});
-(async()=>{try{const {data,error}=await sb.auth.getSession();if(error)throw error;await applySession(data.session)}catch(err){message('loginMessage','Ulanishda xatolik: '+err.message,true)}})();
+
+// Ichki bildirishnomalar: faqat autentifikatsiyalangan foydalanuvchining xabarlari.
+const notifWidgets=[];
+let notifItems=[];
+let notifBusy=false;
+function setupNotifications(){
+ for(const header of [document.querySelector('#advisorPage .topbar'),document.querySelector('#appPage .topbar')]){
+  if(!header)continue;
+  const wrap=document.createElement('div');wrap.className='notif-wrap';
+  const bell=document.createElement('button');bell.type='button';bell.className='notif-bell';bell.setAttribute('aria-label','Bildirishnomalar');bell.setAttribute('aria-expanded','false');bell.textContent='🔔';
+  const count=document.createElement('span');count.className='notif-count hidden';bell.append(count);
+  const panel=document.createElement('div');panel.className='notif-panel hidden';
+  const heading=document.createElement('div');heading.className='notif-panel-head';
+  const title=document.createElement('strong');title.textContent='Bildirishnomalar';
+  const refresh=document.createElement('button');refresh.type='button';refresh.className='secondary';refresh.textContent='Yangilash';refresh.addEventListener('click',()=>loadNotifications());
+  heading.append(title,refresh);
+  const list=document.createElement('div');panel.append(heading,list);
+  bell.addEventListener('click',()=>{const opening=panel.classList.contains('hidden');for(const w of notifWidgets){w.panel.classList.add('hidden');w.bell.setAttribute('aria-expanded','false')}if(opening){panel.classList.remove('hidden');bell.setAttribute('aria-expanded','true');loadNotifications()}});
+  wrap.append(bell,panel);
+  const logout=header.querySelector('button[id$="Logout"],#logoutButton');
+  if(logout)logout.before(wrap);else header.append(wrap);
+  notifWidgets.push({bell,count,panel,list});
+ }
+ document.addEventListener('click',e=>{if(!e.target.closest('.notif-wrap'))for(const w of notifWidgets){w.panel.classList.add('hidden');w.bell.setAttribute('aria-expanded','false')}});
+}
+function renderNotifications(){
+ const unread=notifItems.filter(n=>!n.is_read).length;
+ for(const w of notifWidgets){
+  w.count.textContent=unread>99?'99+':String(unread);w.count.classList.toggle('hidden',unread===0);
+  w.list.replaceChildren();
+  if(!notifItems.length){const empty=document.createElement('p');empty.className='muted small';empty.textContent='Bildirishnomalar yo‘q.';w.list.append(empty);continue}
+  for(const n of notifItems){
+   const item=document.createElement('div');item.className='notif-item'+(n.is_read?'':' unread');
+   const title=document.createElement('strong');title.textContent=n.title||'Bildirishnoma';
+   const msg=document.createElement('p');msg.textContent=n.message||'';
+   const date=document.createElement('small');date.textContent=n.created_at?new Date(n.created_at).toLocaleString('uz-UZ'):'';
+   item.append(title,msg,date);
+   if(!n.is_read){const mark=document.createElement('button');mark.type='button';mark.className='secondary';mark.textContent='O‘qildi';mark.addEventListener('click',async()=>{mark.disabled=true;const {error}=await sb.from('notifications').update({is_read:true}).eq('id',n.id).eq('user_id',currentUserId);if(error){mark.disabled=false;alert('Bildirishnoma yangilanmadi: '+error.message);return}n.is_read=true;renderNotifications()});item.append(document.createElement('br'),mark)}
+   w.list.append(item);
+  }
+ }
+}
+async function loadNotifications(){
+ if(!currentUserId||!currentRole||notifBusy)return;
+ notifBusy=true;const userId=currentUserId;
+ try{const {data,error}=await sb.from('notifications').select('id,title,message,is_read,created_at').eq('user_id',userId).order('created_at',{ascending:false}).limit(100);
+  if(error)throw error;if(userId!==currentUserId)return;notifItems=data||[];renderNotifications();
+ }catch(err){for(const w of notifWidgets){if(!w.panel.classList.contains('hidden')){w.list.textContent='Bildirishnomalarni yuklashda xatolik: '+(err.message||err)}}}
+ finally{notifBusy=false}
+}
+setupNotifications();
+setInterval(()=>{if(currentUserId&&currentRole)loadNotifications()},30000);
+
+sb.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){notifItems=[];renderNotifications();++sessionVersion;currentUserId=null;currentRole=null;currentSchoolId=null;hidePanels();show('loginPage',true)}});
+(async()=>{try{const {data,error}=await sb.auth.getSession();if(error)throw error;await applySession(data.session);await loadNotifications()}catch(err){message('loginMessage','Ulanishda xatolik: '+err.message,true)}})();
 </script>
 </body></html>
