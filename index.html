@@ -449,15 +449,60 @@ function wpImportModal(p){
    if(!parsed.sections.length||!parsed.activities.length)throw Error('Jadval avtomatik ajratilmadi. Word jadvalini tekshiring.');preview.dataset.ready='1';save.disabled=false;
   }catch(err){preview.append(wpEl('p','Xatolik: '+(err.message||err),'error'))}});
 }
-function wpActivityReportModal(a){const existing=wpActivityReports.find(r=>r.activity_id===a.id&&r.advisor_id===currentUserId);
- wpDialog('Tadbir hisoboti: '+a.activity_title,[['report_date','O‘tkazilgan sana','date',existing?.report_date||''],['completion_percent','Bajarilish foizi (0–100)','number',existing?.completion_percent??0,true],['work_description','Bajarilgan ishlar','textarea',existing?.work_description||''],['participant_count','Ishtirokchilar soni','number',existing?.participant_count??0],['results','Erishilgan natijalar','textarea',existing?.results||''],['challenges','Muammolar','textarea',existing?.challenges||'']],async v=>{
- const n=Number(v.completion_percent),participants=Number(v.participant_count||0);if(!Number.isInteger(n)||n<0||n>100||!Number.isInteger(participants)||participants<0)throw Error('Foiz yoki ishtirokchilar soni noto‘g‘ri');
- const data={activity_id:a.id,advisor_id:currentUserId,report_date:v.report_date||null,completion_percent:n,completion_status:n===100?'completed':n>0?'in_progress':'not_started',work_description:v.work_description||null,participant_count:participants,results:v.results||null,challenges:v.challenges||null,updated_at:new Date().toISOString()};
- const q=existing?await sb.from('work_plan_activity_reports').update(data).eq('id',existing.id):await sb.from('work_plan_activity_reports').insert(data);if(q.error)throw q.error;
+const WP_IMAGE_TYPES=['image/jpeg','image/png','image/webp'];
+const WP_DOC_TYPES=['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+async function wpGetAttachments(reportId){
+ const q=await sb.from('work_plan_report_attachments').select('*').eq('report_id',reportId).order('created_at');if(q.error)throw q.error;return q.data||[];
+}
+async function wpUploadAttachments(reportId,files){
+ for(const file of files){
+  const image=WP_IMAGE_TYPES.includes(file.type),document=WP_DOC_TYPES.includes(file.type);
+  if(!image&&!document)throw Error('Faqat JPEG, PNG, WebP, PDF, DOC yoki DOCX yuklash mumkin: '+file.name);
+  if(file.size>(image?204800:2097152))throw Error(file.name+': '+(image?'rasm 200 KB':'hujjat 2 MB')+' dan oshmasligi kerak.');
+  const clean=file.name.replace(/[^a-zA-Z0-9._-]/g,'_').slice(-90)||'file';
+  const path=reportId+'/'+crypto.randomUUID()+'_'+clean;
+  const up=await sb.storage.from('work-plan-report-files').upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;
+  const q=await sb.from('work_plan_report_attachments').insert({report_id:reportId,uploaded_by:currentUserId,file_name:file.name,file_path:path,file_type:file.type,file_size:file.size});
+  if(q.error)throw Error(file.name+' yuklandi, lekin ro‘yxatga yozilmadi: '+q.error.message);
+ }
+}
+async function wpAttachmentLinks(reportId,container){
+ container.replaceChildren();const items=await wpGetAttachments(reportId);
+ if(!items.length){container.append(wpEl('p','Hali fayl biriktirilmagan.','wp-note'));return}
+ for(const f of items){const signed=await sb.storage.from('work-plan-report-files').createSignedUrl(f.file_path,3600);
+  if(signed.error){container.append(wpEl('p',f.file_name+' — ochib bo‘lmadi','error'));continue}
+  const link=document.createElement('a');link.href=signed.data.signedUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent=(WP_IMAGE_TYPES.includes(f.file_type)?'📷 ':'📎 ')+f.file_name;
+  link.style.display='block';link.style.margin='7px 0';container.append(link);
+ }
+}
+function wpActivityReportModal(a){
+ const existing=wpActivityReports.find(r=>r.activity_id===a.id&&r.advisor_id===currentUserId);
+ const shade=wpEl('div',undefined,'wp-modal'),panel=wpEl('div',undefined,'wp-dialog');
+ panel.append(wpEl('h2','Tadbir hisoboti: '+a.activity_title));
+ const form=wpEl('form',undefined,'wp-grid'),inputs={};
+ for(const [name,label,type,value,required] of [['report_date','O‘tkazilgan sana','date',existing?.report_date||''],['completion_percent','Bajarilish foizi (0–100)','number',existing?.completion_percent??0,true],['work_description','Bajarilgan ishlar','textarea',existing?.work_description||''],['participant_count','Ishtirokchilar soni','number',existing?.participant_count??0],['results','Erishilgan natijalar','textarea',existing?.results||''],['challenges','Muammolar','textarea',existing?.challenges||'']]){
+  const f=wpField(name,label,type,value,required);inputs[name]=f.input;if(type==='textarea')f.box.className='full';form.append(f.box);
+ }
+ const filesBox=wpEl('div',undefined,'full');filesBox.append(wpEl('label','📷 Rasmlar (200 KB gacha) va 📎 hujjatlar (2 MB gacha)'));
+ const fileInput=document.createElement('input');fileInput.type='file';fileInput.multiple=true;fileInput.accept='.jpg,.jpeg,.png,.webp,.pdf,.doc,.docx';filesBox.append(fileInput,wpEl('p','Rasmlar Word hisobot ichida tegishli tadbir ostiga joylanadi. Hujjatlar havola sifatida ko‘rsatiladi.','wp-note'));
+ const links=wpEl('div');filesBox.append(wpEl('strong','Biriktirilgan fayllar'),links);form.append(filesBox);
+ if(existing)wpAttachmentLinks(existing.id,links).catch(e=>links.textContent='Fayllarni ko‘rsatishda xatolik: '+e.message);else links.append(wpEl('p','Hali fayl biriktirilmagan.','wp-note'));
+ const actions=wpEl('div',undefined,'full wp-inline'),submit=wpEl('button','Saqlash');submit.type='submit';
+ const err=wpEl('p','', 'notice');actions.append(submit,wpBtn('Bekor qilish',()=>shade.remove()),err);form.append(actions);
+ form.addEventListener('submit',async e=>{e.preventDefault();submit.disabled=true;err.className='notice';err.textContent='Saqlanmoqda…';
+  try{const v=Object.fromEntries(Object.entries(inputs).map(([k,x])=>[k,x.value]));const n=Number(v.completion_percent),participants=Number(v.participant_count||0);
+   if(!Number.isInteger(n)||n<0||n>100||!Number.isInteger(participants)||participants<0)throw Error('Foiz yoki ishtirokchilar soni noto‘g‘ri');
+   const files=[...fileInput.files];for(const f of files){const img=WP_IMAGE_TYPES.includes(f.type);if(!img&&!WP_DOC_TYPES.includes(f.type))throw Error('Fayl turi ruxsat etilmagan: '+f.name);if(f.size>(img?204800:2097152))throw Error(f.name+' hajmi belgilangan limitdan katta');}
+   const data={activity_id:a.id,advisor_id:currentUserId,report_date:v.report_date||null,completion_percent:n,completion_status:n===100?'completed':n>0?'in_progress':'not_started',work_description:v.work_description||null,participant_count:participants,results:v.results||null,challenges:v.challenges||null,updated_at:new Date().toISOString()};
+   const q=existing?await sb.from('work_plan_activity_reports').update(data).eq('id',existing.id).select('id').single():await sb.from('work_plan_activity_reports').insert(data).select('id').single();if(q.error)throw q.error;
+   if(files.length)await wpUploadAttachments(q.data.id,files);
+   shade.remove();await wpLoad();
+  }catch(ex){err.className='notice error';err.textContent='Xatolik: '+(ex.message||ex)+' (Matn saqlangan bo‘lishi mumkin; qayta tekshiring.)'}finally{submit.disabled=false}
  });
+ panel.append(form);shade.append(panel);shade.addEventListener('click',e=>{if(e.target===shade)shade.remove()});document.body.append(shade);
 }
 async function wpExportDocx(p,sectionId=null){
- const docx=await import('https://esm.sh/docx@9.5.1');const {Document,Paragraph,TextRun,HeadingLevel,Packer}=docx;
+ const docx=await import('https://esm.sh/docx@9.5.1');const {Document,Paragraph,TextRun,HeadingLevel,Packer,ImageRun}=docx;
  const selected=wpImportedSections.filter(s=>String(s.plan_id)===String(p.id)&&(!sectionId||String(s.id)===String(sectionId))).sort((a,b)=>a.section_number-b.section_number);
  const paragraphs=[new Paragraph({text:wpSchool(p.school_id),heading:HeadingLevel.HEADING_1,alignment:'center'}),new Paragraph({text:p.title+' — HISOBOT',heading:HeadingLevel.HEADING_1,alignment:'center'}),new Paragraph({text:wpLabel(p)})];
  for(const sec of selected){paragraphs.push(new Paragraph({text:sec.section_number+'. '+sec.section_title,heading:HeadingLevel.HEADING_2}));
@@ -465,6 +510,20 @@ async function wpExportDocx(p,sectionId=null){
    const r=wpActivityReports.find(x=>x.activity_id===a.id);
    paragraphs.push(new Paragraph({children:[new TextRun({text:a.activity_number+'. '+a.activity_title,bold:true})]}));
    for(const [label,value] of [['Amalga oshirish mexanizmi',a.implementation_mechanism],['Rejadagi muddat',a.deadline_text],['Mas’ullar',a.responsible_people],['Bajarilish',String(r?.completion_percent??0)+'%'],['O‘tkazilgan sana',r?.report_date],['Bajarilgan ishlar',r?.work_description],['Ishtirokchilar',r?.participant_count],['Natijalar',r?.results],['Muammolar',r?.challenges]])if(value!==null&&value!==undefined&&value!=='')paragraphs.push(new Paragraph({text:label+': '+value}));
+   if(r){const attachments=await wpGetAttachments(r.id);
+    for(const f of attachments){
+     if(!WP_IMAGE_TYPES.includes(f.file_type))continue;
+     try{const signed=await sb.storage.from('work-plan-report-files').createSignedUrl(f.file_path,120);
+      if(signed.error)throw signed.error;const response=await fetch(signed.data.signedUrl);if(!response.ok)throw Error('HTTP '+response.status);
+      let data=await response.arrayBuffer();let type=f.file_type;
+      // docx ImageRun supports PNG/JPEG/GIF/BMP/SVG; convert WebP to PNG in browser.
+      if(type==='image/webp'){const bitmap=await createImageBitmap(new Blob([data],{type}));const canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height;canvas.getContext('2d').drawImage(bitmap,0,0);bitmap.close();data=await (await new Promise(resolve=>canvas.toBlob(resolve,'image/png'))).arrayBuffer();type='image/png'}
+      const blob=new Blob([data],{type});const bmp=await createImageBitmap(blob);const ratio=Math.min(1,520/bmp.width,650/bmp.height),width=Math.max(1,Math.round(bmp.width*ratio)),height=Math.max(1,Math.round(bmp.height*ratio));bmp.close();
+      paragraphs.push(new Paragraph({text:'Ilova: '+f.file_name}));paragraphs.push(new Paragraph({children:[new ImageRun({data,type:type==='image/png'?'png':'jpg',transformation:{width,height}})]}));
+     }catch(e){paragraphs.push(new Paragraph({text:'Rasmni joylashtirib bo‘lmadi: '+f.file_name+' ('+(e.message||e)+')'}))}
+    }
+    for(const f of attachments.filter(x=>!WP_IMAGE_TYPES.includes(x.file_type)))paragraphs.push(new Paragraph({text:'Biriktirilgan hujjat: '+f.file_name}));
+   }
   }
  }
  const blob=await Packer.toBlob(new Document({sections:[{properties:{},children:paragraphs}]}));const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='Ish_rejasi_hisoboti_'+p.id+(sectionId?'_yonalish_'+sectionId:'')+'.docx';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
